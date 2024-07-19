@@ -5,7 +5,7 @@ import Counter from "./components/Counter";
 function App() {
   return (
     <main>
-      <h1>🎈 Welcome to PartyKit!</h1>
+      <h1>🎈 Welcome to Pizza decider!</h1>
       <p>
         This is the React starter. (
         <a href="https://github.com/partykit/templates/tree/main/templates/react">

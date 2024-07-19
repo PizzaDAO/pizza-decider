@@ -1,5 +1,7 @@
 # 🎈 pizza-decider
 
+App to help you choose the right pizza - FAST!
+
 Welcome to the party, pal!
 
 This is a [Partykit](https://partykit.io) project, which lets you create real-time collaborative applications with minimal coding effort.
