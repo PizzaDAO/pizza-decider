@@ -2,48 +2,54 @@ import type * as Party from "partykit/server";
 
 export default class Server implements Party.Server {
   count = 0;
+  messages: any[] = [];
 
   constructor(readonly room: Party.Room) {}
 
   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
-    // A websocket just connected!
     console.log(
-      `Connected:
-  id: ${conn.id}
-  room: ${this.room.id}
-  url: ${new URL(ctx.request.url).pathname}`
+      `Connected: id: ${conn.id}, room: ${this.room.id}, url: ${
+        new URL(ctx.request.url).pathname
+      }`
     );
-
-    // send the current count to the new client
-    conn.send(this.count.toString());
+    conn.send(JSON.stringify({ type: "count", count: this.count }));
+    this.messages.forEach((message) =>
+      conn.send(JSON.stringify({ type: "chat", message }))
+    );
   }
 
   onMessage(message: string, sender: Party.Connection) {
-    // let's log the message
-    console.log(`connection ${sender.id} sent message: ${message}`);
-    // we could use a more sophisticated protocol here, such as JSON
-    // in the message data, but for simplicity we just use a string
-    if (message === "increment") {
-      this.increment();
+    try {
+      const data = JSON.parse(message);
+      if (data.type === "increment") {
+        this.increment();
+      } else if (data.type === "chat") {
+        this.messages.push(data.message);
+        this.room.broadcast(
+          JSON.stringify({ type: "chat", message: data.message }),
+          []
+        );
+      }
+    } catch (error) {
+      console.error("Error processing message:", error);
     }
   }
 
   onRequest(req: Party.Request) {
-    // response to any HTTP request (any method, any path) with the current
-    // count. This allows us to use SSR to give components an initial value
-
-    // if the request is a POST, increment the count
     if (req.method === "POST") {
       this.increment();
     }
-
-    return new Response(this.count.toString());
+    return new Response(
+      JSON.stringify({ count: this.count, messages: this.messages })
+    );
   }
 
   increment() {
     this.count = (this.count + 1) % 100;
-    // broadcast the new count to all clients
-    this.room.broadcast(this.count.toString(), []);
+    this.room.broadcast(
+      JSON.stringify({ type: "count", count: this.count }),
+      []
+    );
   }
 }
 
