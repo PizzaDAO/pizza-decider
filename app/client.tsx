@@ -1,6 +1,7 @@
 import "./styles.css";
 import { createRoot } from "react-dom/client";
 import Counter from "./components/Counter";
+import Chat from "./components/Chat";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <i>This counter is multiplayer. Try it with multiple browser tabs.</i>
       </p>
       <Counter />
+      <Chat />
     </main>
   );
 }
