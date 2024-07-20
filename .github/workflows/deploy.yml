@@ -18,7 +18,7 @@ jobs:
           node-version: 18
           cache: "npm"
       - run: npm ci
-      - run: npm run deploy
+      - run: npm run party:deploy
         env:
           PARTYKIT_TOKEN: ${{ secrets.PARTYKIT_TOKEN }}
           PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN  }}
