@@ -7,7 +7,7 @@ import NewRoom from "./components/new-room";
 
 const randomWords: RandomWordOptions<3> = {
   format: "kebab",
-  categories: { noun: ["animals"] },
+  categories: { noun: ["food"], adjective: ["taste"] },
   partsOfSpeech: ["adjective", "adjective", "noun"],
 };
 
